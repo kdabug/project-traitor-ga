@@ -1,0 +1,23 @@
+#ticker {
+  display: inline;
+}
+
+nav {
+  background-color: lightblue;
+  display: flex;
+  top: 0px;
+  position: fixed;
+  width: 100%;
+  height: 65px;
+  align-content: space-around;
+  justify-content: center;
+  order: 1;
+}
+
+nav a {
+  padding: 10px;
+  margin: 10px 10px 10px 10px;
+  display: flex;
+  text-decoration: none;
+  order: 1;
+}

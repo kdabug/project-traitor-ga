@@ -1,7 +1,8 @@
 import axios from "axios";
 
 const TOKEN = process.env.REACT_APP_TOKEN;
-const BASE_URL = "https://cloud.iexapis.com";
+const BASE_URL =
+  "https://cors-anywhere.herokuapp.com/https://cloud.iexapis.com";
 // const api = axios.create({
 //   baseURL: BASE_URL,
 //   headers: {
@@ -9,9 +10,12 @@ const BASE_URL = "https://cloud.iexapis.com";
 //   }
 // });
 
-const fetchStockData = async () => {
+const fetchStockSymbols = async () => {
   try {
-    const resp = await axios(`${BASE_URL}/stock`);
+    const resp = await axios(
+      `${BASE_URL}/beta/ref-data/symbols?token=${TOKEN}`
+    );
+    console.log("this is resp", resp);
     return resp.data;
   } catch (e) {
     console.log("got a problem: ", e);
@@ -19,4 +23,17 @@ const fetchStockData = async () => {
   }
 };
 
-export default fetchStockData;
+const fetchStockLists = async listType => {
+  try {
+    const resp = await axios(
+      `${BASE_URL}/stock/market/list/${listType}?token=${TOKEN}`
+    );
+    console.log("this is resp", resp);
+    return resp.data;
+  } catch (e) {
+    console.log("got a problem: ", e);
+    return [];
+  }
+};
+
+export { fetchStockSymbols, fetchStockLists };
