@@ -8,33 +8,7 @@ import Form from "./Form";
 class Plank extends Component {
   constructor() {
     super();
-    this.state = {
-      listSelect: "",
-      stockList: []
-    };
-    this.handleListSubmit = this.handleListSubmit.bind(this);
-    this.handleListChange = this.handleListChange.bind(this);
   }
-  handleListChange(e) {
-    e.preventDefault();
-    const { name, value } = e.target;
-    console.log("target", name);
-    this.setState({
-      [name]: value
-    });
-  }
-  async handleListSubmit(e) {
-    e.preventDefault();
-    // this.setState = {
-    //   listSelect: this.state.listSelect
-    // };
-    const newList = await fetchStockLists(this.state.listSelect);
-    console.log("this is the list data: newList", newList);
-    this.setState({
-      stockList: newList
-    });
-  }
-
   render() {
     return (
       <div className="plank-container">
@@ -52,11 +26,13 @@ class Plank extends Component {
           onClick={this.props.onClick}
         />
         <RenderStockList
-          onListChange={this.handleListChange}
-          onListSubmit={this.handleListSubmit}
-          stockList={this.state.stockList}
+          onListChange={this.props.onListChange}
+          onListSubmit={this.props.onListSubmit}
         />
-        <DisplayStockList stockList={this.props.stockList} />
+        <DisplayStockList
+          stockList={this.props.stockList}
+          stockListInfo={this.props.stockListInfo}
+        />
       </div>
     );
   }

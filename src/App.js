@@ -43,15 +43,19 @@ class App extends Component {
       transactionHistory: [],
 
       stockInfo: [],
-      stockList: [],
-
       userInput: "",
       autocompleteOptions: [],
       activeOption: 0,
       filteredOptions: [],
       showOptions: false,
-      userInput: ""
+
+      listSelect: "",
+      stockList: [],
+      stockListInfo: []
     };
+
+    this.handleListSubmit = this.handleListSubmit.bind(this);
+    this.handleListChange = this.handleListChange.bind(this);
     this.updateTickerInfo = this.updateTickerInfo.bind(this);
     this.fetchSpecificTickerInfo = this.fetchSpecificTickerInfo.bind(this);
     this.fetchStocks = this.fetchStocks.bind(this);
@@ -60,23 +64,27 @@ class App extends Component {
     this.handleQueryKeyDown = this.handleQueryKeyDown.bind(this);
   }
 
-  updateTickerInfo = companyId => {
+  async updateTickerInfo() {
+    const { userInput } = this.state;
     const { stockInfo } = this.state;
     const ticker = stockInfo.map(stock => {
-      if (stock.name === companyId || stock.symbol === companyId) {
+      if (
+        stock.name.toLowerCase() === userInput.toLowerCase() ||
+        stock.symbol.toLowerCase() === userInput.toLowerCase()
+      ) {
         return stock.symbol;
       }
     });
     this.setState({
       ticker: ticker
     });
-    this.fetchSpecificTickerInfo();
-  };
+    await this.fetchSpecificTickerInfo();
+  }
 
   async fetchSpecificTickerInfo() {
-    const { ticker } = this.state.ticker;
+    const { ticker } = this.state;
     const tickerPrice = await fetchTickerPrice(ticker);
-    const companyFinancials = await fetchCompanyInfo(ticker);
+    const companyFinancials = await fetchCompanyFinancials(ticker);
     const companyInfo = await fetchCompanyInfo(ticker);
     const companyPeers = await fetchCompanyPeers(ticker);
     const companyLogo = await fetchCompanyLogo(ticker);
@@ -88,6 +96,32 @@ class App extends Component {
       companyPeers: companyPeers,
       companyLogo: companyLogo,
       keyStats: keyStats
+    });
+  }
+
+  handleListChange(e) {
+    e.preventDefault();
+    const { name, value } = e.target;
+    console.log("target", name);
+    this.setState({
+      [name]: value
+    });
+  }
+  async handleListSubmit(e) {
+    e.preventDefault();
+    // this.setState = {
+    //   listSelect: this.state.listSelect
+    // };
+    const newList = await fetchStockLists(this.state.listSelect);
+    console.log("this is the list data: newList", newList);
+    const newListInfo = newList.map(async stock => ({
+      price: await fetchTickerPrice(stock),
+      companyLogo: await fetchCompanyLogo(stock),
+      companyInfo: await fetchCompanyInfo(stock)
+    }));
+    this.setState({
+      stockList: newList,
+      stockListInfo: newListInfo
     });
   }
 
@@ -116,11 +150,7 @@ class App extends Component {
       showOptions: false,
       userInput: e.currentTarget.innerText
     });
-    this.updateTickerInfo(this.state.userInput);
-    // take userInput and check it against values in stock info
-    //use stock info to find ticker symbol
-    //use tickersymbol to fetch stock info
-    //open detail page with (possible helper function to pass into other functions)
+    this.updateTickerInfo();
   };
 
   handleQueryKeyDown = e => {
@@ -202,7 +232,6 @@ class App extends Component {
               <div>
                 <h1>Hello Chest</h1>
                 <Chest
-                  {...props}
                   currentBooty={this.state.currentBooty}
                   currentInventory={this.state.currentInventory}
                   stockInfo={this.state.stockInfo}
@@ -232,6 +261,11 @@ class App extends Component {
                   userInput={this.state.userInput}
                   filteredOptions={this.state.filteredOptions}
                   activeOption={this.state.activeOption}
+                  onListChange={this.handleListChange}
+                  onListSubmit={this.handleListSubmit}
+                  stockList={this.state.stockList}
+                  listSelect={this.state.listSelect}
+                  stockListInfo={this.state.stockListInfo}
                 />
               </div>
             )}
