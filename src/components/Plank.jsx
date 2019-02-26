@@ -38,11 +38,17 @@ class Plank extends Component {
     return (
       <div className="plank-container">
         <Nav />
-        <h1>Welcome to Plank</h1>
+        <h1>walk the plank</h1>
+        <p>in the depths, find yer treasure</p>
         <Form
           onSubmit={this.props.onSubmit}
           onChange={this.props.onChange}
           options={this.props.options}
+          showOptions={this.props.showOptions}
+          userInput={this.props.userInput}
+          filteredOptions={this.props.filteredOptions}
+          activeOption={this.props.activeOption}
+          onClick={this.props.onClick}
         />
         <RenderStockList
           onChange={this.state.handleListChange}

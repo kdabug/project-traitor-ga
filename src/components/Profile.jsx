@@ -5,7 +5,8 @@ const Profile = () => {
   return (
     <div className="profile-container">
       <Nav />
-      <h1>Welcome to Profile</h1>
+      <h1>chose the route of the traitor, have ye?</h1>
+      <h2>here's your pirate profile</h2>
     </div>
   );
 };

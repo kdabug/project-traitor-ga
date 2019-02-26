@@ -4,6 +4,7 @@ import DisplayStockList from "./DisplayStockList";
 const RenderStockList = props => {
   return (
     <div className="stock-list">
+      <p>Search Stocks by Currated Lists:</p>
       <form>
         <select name="listSelect" onChange={props.onChange}>
           <option value="mostactive">Most Active</option>

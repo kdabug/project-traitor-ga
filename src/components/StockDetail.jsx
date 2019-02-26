@@ -3,7 +3,7 @@ import Nav from "./Nav";
 
 export default class StockDetail extends Component {
   render() {
-    const randomColor = Math.floor(Math.random() * 16777215).toString(16);
+    const { }
     return (
       <>
         <Nav />

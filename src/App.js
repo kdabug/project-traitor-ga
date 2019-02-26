@@ -19,37 +19,99 @@ class App extends Component {
       ticker: "",
       stockInfo: [],
       autocompleteOptions: [],
-      currentBooty: "",
+      currentBooty: 1000,
+      currentInventory: [
+        { name: "Apple", ticker: "AAPL", amount: "2" },
+        { name: "Apple", ticker: "AAPL", amount: "2" }
+      ],
       transactionHistory: [],
-      selectedCompany: ""
+      selectedCompany: "",
+      activeOption: 0,
+      filteredOptions: [],
+      showOptions: false,
+      userInput: ""
     };
     this.fetchStocks = this.fetchStocks.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleQueryChange = this.handleQueryChange.bind(this);
+    this.handleQueryClick = this.handleQueryClick.bind(this);
+    this.handleQueryKeyDown = this.handleQueryKeyDown.bind(this);
   }
-  handleChange(e) {
-    // e.preventDefault();
-    const { name, value } = e.target;
-    console.log("target", name);
-    this.setState({
-      [name]: value
-    });
-  }
-  handleSubmit(e) {
-    e.preventDefault();
-    const { userInput, stockInfo } = this.state;
-    const { name, value } = e.target;
-    console.log("target", name);
-    this.setState({
-      [name]: value
-    });
-    const tickerIndex = stockInfo.filter(
-      company => company.name === userInput || company.symbol === userInput
+
+  handleQueryChange = e => {
+    const { autocompleteOptions } = this.state;
+    const userInput = e.currentTarget.value;
+    console.log("this is userInput", userInput);
+    const filteredOptions = autocompleteOptions.filter(
+      option => option.toLowerCase().indexOf(userInput.toLowerCase()) > -1
     );
-    this.setState = {
-      ticker: tickerIndex.symbol
-    };
-  }
+    console.log("this is handleQueryChange: filteredOptions", filteredOptions);
+    this.setState({
+      activeOption: 0,
+      filteredOptions: filteredOptions,
+      showOptions: true,
+      userInput: userInput
+    });
+  };
+
+  handleQueryClick = e => {
+    e.preventDefault();
+    console.log("this is handlequeryclick: userInput", this.state.userInput);
+    this.setState({
+      activeOption: 0,
+      filteredOptions: [],
+      showOptions: false,
+      userInput: e.currentTarget.innerText
+    });
+    // take userInput and check it against values in stock info
+    //use stock info to find ticker symbol
+    //use tickersymbol to fetch stock info
+    //open detail page with (possible helper function to pass into other functions)
+  };
+
+  handleQueryKeyDown = e => {
+    const { activeOption, filteredOptions } = this.state;
+    if (e.keyCode === 13) {
+      this.setState({
+        activeOption: 0,
+        showOptions: false,
+        userInput: filteredOptions[activeOption]
+      });
+    } else if (e.keyCode === 38) {
+      if (activeOption === 0) {
+        return;
+      }
+      this.setState({ activeOption: activeOption - 1 });
+    } else if (e.keyCode === 40) {
+      if (activeOption - 1 === filteredOptions.length) {
+        return;
+      }
+      this.setState({ activeOption: activeOption + 1 });
+    }
+  };
+
+  // handleChange(e) {
+  //   // e.preventDefault();
+  //   const { name, value } = e.target;
+  //   console.log("target", name);
+  //   this.setState({
+  //     [name]: value
+  //   });
+  // }
+  // handleSubmit(e) {
+  //   e.preventDefault();
+  //   const { userInput, stockInfo } = this.state;
+  //   const { name, value } = e.target;
+  //   console.log("target", name);
+  //   this.setState({
+  //     [name]: value
+  //   });
+  //   const tickerIndex = stockInfo.filter(
+  //     company => company.name === userInput || company.symbol === userInput
+  //   );
+  //   this.setState = {
+  //     ticker: tickerIndex.symbol
+  //   };
+  // }
   async componentDidMount() {
     this.fetchStocks();
   }
@@ -74,7 +136,6 @@ class App extends Component {
             path="/"
             render={() => (
               <div>
-                <h1>Hello Welcome</h1>
                 <Welcome />
               </div>
             )}
@@ -86,10 +147,16 @@ class App extends Component {
                 <h1>Hello Chest</h1>
                 <Chest
                   {...props}
+                  currentBooty={this.state.currentBooty}
+                  currentInventory={this.state.currentInventory}
+                  stockInfo={this.state.stockInfo}
                   ticker={this.state.ticker}
-                  onSubmit={this.state.handleSubmit}
-                  onChange={this.state.handleChange}
-                  options={this.state.autocompleteOptions}
+                  onKeyDown={this.handleQueryKeyDown}
+                  onChange={this.handleQueryChange}
+                  onClick={this.handleQueryClick}
+                  showOptions={this.state.showOptions}
+                  userInput={this.state.userInput}
+                  filteredOptions={this.state.filteredOptions}
                 />
               </div>
             )}
@@ -103,9 +170,13 @@ class App extends Component {
                   {...props}
                   stockInfo={this.state.stockInfo}
                   ticker={this.state.ticker}
-                  onSubmit={this.state.handleSubmit}
-                  onChange={this.state.handleChange}
-                  options={this.state.autocompleteOptions}
+                  onKeyDown={this.handleQueryKeyDown}
+                  onChange={this.handleQueryChange}
+                  onClick={this.handleQueryClick}
+                  showOptions={this.state.showOptions}
+                  userInput={this.state.userInput}
+                  filteredOptions={this.state.filteredOptions}
+                  activeOption={this.state.activeOption}
                 />
               </div>
             )}

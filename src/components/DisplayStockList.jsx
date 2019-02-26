@@ -6,7 +6,7 @@ const DisplayStockList = props => {
   //console.log("stockList: renderstock", stockList);
   return (
     <div className="stock-list">
-      Hi React
+      StockList Displayed Here
       {stockList &&
         stockList.map((el, index) => (
           <DisplayStock key={index} stockData={el} />

@@ -1,9 +1,24 @@
+/* FONTS
+
+font-family: 'IM Fell English SC', serif;
+font-family: 'IM Fell English', serif;
+font-family: 'Inconsolata', monospace; */
+
+body {
+  margin: 0;
+  padding: 0;
+  /*  Background fallback in case of IE8 & down, or in case video doens't load, such as with slower connections  */
+  background: grey;
+  font-family: "Inconsolata", monospace;
+}
+
 #ticker {
   display: inline;
 }
 
 nav {
-  background-color: lightblue;
+  background-color: black;
+  color: white;
   display: flex;
   top: 0px;
   position: fixed;
@@ -12,12 +27,156 @@ nav {
   align-content: space-around;
   justify-content: center;
   order: 1;
+  text-decoration: none;
 }
 
 nav a {
+  color: white;
   padding: 10px;
   margin: 10px 10px 10px 10px;
   display: flex;
   text-decoration: none;
   order: 1;
+}
+
+/* video {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  z-index: -100;
+}
+#background-video {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  z-index: -100;
+} */
+
+.welcome-container {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-color: red;
+  background-image: url("./images/calico-jack.png");
+}
+
+.welcome-script {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 100vw;
+  height: 100vh;
+  flex-direction: column;
+}
+.welcome-button {
+  background-color: rgba(245, 237, 237, 0.61);
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  border-radius: 15px;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 20px;
+  font-family: "Inconsolata", monospace;
+}
+
+.welcome-button-container {
+  position: relative;
+  bottom: -120px;
+  padding: 15px 32px;
+}
+
+.welcome-button a {
+  text-decoration: none;
+  color: white;
+  margin: 50px;
+}
+
+.title {
+  color: white;
+  font-family: "IM Fell English SC", serif;
+  font-size: 70px;
+}
+
+.subtitle {
+  font-family: "IM Fell English", serif;
+  color: lightgrey;
+}
+
+.chest-container {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 100vw;
+  height: 100vh;
+  flex-direction: column;
+  position: relative;
+  top: -120px;
+}
+
+.plank-container {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  width: 100vw;
+  height: 100vh;
+  flex-direction: column;
+  position: relative;
+}
+
+.compass-container {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  width: 100vw;
+  height: 100vh;
+  flex-direction: column;
+  position: relative;
+}
+
+.query-search-form {
+  width: 100%;
+  height: 40vh;
+  border: red solid 2px;
+}
+
+.options {
+  color: black;
+  width: 40px;
+}
+
+.no-options {
+  color: black;
+  width: 40px;
+}
+
+.footer a {
+  position: absolute;
+  display: flex;
+  text-align: center;
+  bottom: 0px;
+  text-decoration: none;
+  color: white;
 }

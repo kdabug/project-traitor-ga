@@ -1,74 +1,22 @@
 import React, { Component } from "react";
+import Autosuggest from "react-autosuggest";
+import PropTypes from "prop-types";
 
 class Form extends Component {
-  constructor() {
-    super();
-    this.state = {
-      activeOption: 0,
-      filteredOptions: [],
-      showOptions: false,
-      userInput: ""
-    };
-    this.onChange = this.onChange.bind(this);
-    this.onClick = this.onClick.bind(this);
-    this.onKeyDown = this.onKeyDown.bind(this);
-  }
-
-  onChange = e => {
-    e.preventDefault();
-    const { options } = this.props;
-    const userInput = e.currentTarget.value;
-    const filteredOptions = options.filter(
-      option => option.toLowerCase().indexOf(userInput.toLowerCase()) > -1
-    );
-    this.props.onChange;
-    this.setState({
-      activeOption: 0,
-      filteredOptions: filteredOptions,
-      showOptions: true,
-      userInput: userInput
-    });
-  };
-
-  onClick = e => {
-    e.preventDefault();
-    this.props.onSubmit();
-    this.setState({
-      activeOption: 0,
-      filteredOptions: [],
-      showOptions: false,
-      userInput: e.currentTarget.innerText
-    });
-  };
-
-  onKeyDown = e => {
-    const { activeOption, filteredOptions } = this.state;
-    if (e.keyCode === 13) {
-      this.setState({
-        activeOption: 0,
-        showOptions: false,
-        userInput: filteredOptions[activeOption]
-      });
-    } else if (e.keyCode === 38) {
-      if (activeOption === 0) {
-        return;
-      }
-      this.setState({ activeOption: activeOption - 1 });
-    } else if (e.keyCode === 40) {
-      if (activeOption - 1 === filteredOptions.length) {
-        return;
-      }
-      this.setState({ activeOption: activeOption + 1 });
-    }
-  };
-
   render() {
+    // propTypes = {
+    //   options: PropTypes.instanceOf(Array).isRequired
+    // };
     const {
       onChange,
       onClick,
       onKeyDown,
-      state: { activeOption, filteredOptions, showOptions, userInput }
-    } = this;
+      activeOption,
+      filteredOptions,
+      showOptions,
+      userInput
+    } = this.props;
+
     let optionList;
     if (showOptions && userInput) {
       if (filteredOptions.length) {
@@ -95,10 +43,11 @@ class Form extends Component {
         );
       }
     }
+
     return (
       <React.Fragment>
-        <div className="search">
-          <label htmlFor="query">Search by Company Name or Symbol</label>
+        <form className="query-search-form">
+          <label htmlFor="userInput">Search by Company Name or Symbol</label>
           <input
             type="text"
             className="search-box"
@@ -107,9 +56,19 @@ class Form extends Component {
             value={userInput}
             name="userInput"
           />
-          {/* <input type="submit" value="" className="search-btn" /> */}
-          {optionList}
-        </div>
+          <input
+            type="submit"
+            value="submit"
+            onSubmit={onClick}
+            className="search-btn"
+          />
+          <div>{optionList}</div>
+        </form>
+        {/* <RenderOptionsList
+        activeOption={activeOption}
+        filteredOptions={filteredOptions}
+        showOptions={showOptions}
+      /> */}
       </React.Fragment>
     );
   }
