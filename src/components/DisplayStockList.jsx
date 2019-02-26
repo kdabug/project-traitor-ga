@@ -9,7 +9,7 @@ const DisplayStockList = props => {
       StockList Displayed Here
       {stockList &&
         stockList.map((el, index) => (
-          <DisplayStock key={index} stockData={el} />
+          <div className="stock-card-container">hello</div>
         ))}
     </div>
   );

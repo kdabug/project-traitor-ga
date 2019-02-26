@@ -16,7 +16,7 @@ class Plank extends Component {
     this.handleListChange = this.handleListChange.bind(this);
   }
   handleListChange(e) {
-    // e.preventDefault();
+    e.preventDefault();
     const { name, value } = e.target;
     console.log("target", name);
     this.setState({
@@ -29,6 +29,7 @@ class Plank extends Component {
     //   listSelect: this.state.listSelect
     // };
     const newList = await fetchStockLists(this.state.listSelect);
+    console.log("this is the list data: newList", newList);
     this.setState({
       stockList: newList
     });
@@ -51,8 +52,8 @@ class Plank extends Component {
           onClick={this.props.onClick}
         />
         <RenderStockList
-          onChange={this.state.handleListChange}
-          onSubmit={this.state.handleListSubmit}
+          onListChange={this.handleListChange}
+          onListSubmit={this.handleListSubmit}
           stockList={this.state.stockList}
         />
         <DisplayStockList stockList={this.props.stockList} />
