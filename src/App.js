@@ -26,14 +26,15 @@ class App extends Component {
     super();
     this.state = {
       ticker: "",
-      tickerPrice: 0,
-      tickerInfo: [],
-      companyInfo: {},
-      companyFinancials: {},
-      HistoricalPrices: [],
-      companyPeers: [],
-      companyLogo: {},
-      keyStats: {},
+      tickerInfo: {
+        tickerPrice: 0,
+        companyInfo: {},
+        companyFinancials: {},
+        HistoricalPrices: [],
+        companyPeers: [],
+        companyLogo: {},
+        keyStats: {}
+      },
 
       currentBooty: 1000,
       currentInventory: [
@@ -50,39 +51,46 @@ class App extends Component {
       showOptions: false,
 
       listSelect: "",
-      stockList: [],
-      stockListInfo: []
+      stockList: []
     };
 
     this.handleListSubmit = this.handleListSubmit.bind(this);
     this.handleListChange = this.handleListChange.bind(this);
-    this.updateTickerInfo = this.updateTickerInfo.bind(this);
+    //this.updateTickerInfo = this.updateTickerInfo.bind(this);
     this.fetchSpecificTickerInfo = this.fetchSpecificTickerInfo.bind(this);
+    // this.findListInfo = this.findListInfo.bind(this);
+    this.handleDetailSubmit = this.handleDetailSubmit.bind(this);
     this.fetchStocks = this.fetchStocks.bind(this);
     this.handleQueryChange = this.handleQueryChange.bind(this);
     this.handleQueryClick = this.handleQueryClick.bind(this);
     this.handleQueryKeyDown = this.handleQueryKeyDown.bind(this);
   }
 
-  async updateTickerInfo() {
-    const { userInput } = this.state;
-    const { stockInfo } = this.state;
-    const ticker = stockInfo.map(stock => {
-      if (
-        stock.name.toLowerCase() === userInput.toLowerCase() ||
-        stock.symbol.toLowerCase() === userInput.toLowerCase()
-      ) {
-        return stock.symbol;
-      }
-    });
-    this.setState({
-      ticker: ticker
-    });
-    await this.fetchSpecificTickerInfo();
-  }
+  // updateTickerInfo() {
+  //   const { userInput } = this.state;
+  //   const { stockInfo } = this.state;
+  //   const ticker = stockInfo.filter(stock => {
+  //     if (
+  //       stock.name.toLowerCase() === userInput.toLowerCase() ||
+  //       stock.symbol.toLowerCase() === userInput.toLowerCase()
+  //     ) {
+  //       return stock;
+  //     }
+  //   });
+  //   debugger;
+  //   console.log(
+  //     "This is update ticker info ticker:",
+  //     ticker,
+  //     "and userInput:",
+  //     userInput
+  //   );
+  //   this.setState({
+  //     ticker: ticker
+  //   });
+  //   this.fetchSpecificTickerInfo();
+  // }
 
-  async fetchSpecificTickerInfo() {
-    const { ticker } = this.state;
+  async fetchSpecificTickerInfo(ticker) {
     const tickerPrice = await fetchTickerPrice(ticker);
     const companyFinancials = await fetchCompanyFinancials(ticker);
     const companyInfo = await fetchCompanyInfo(ticker);
@@ -90,14 +98,34 @@ class App extends Component {
     const companyLogo = await fetchCompanyLogo(ticker);
     const keyStats = await fetchCompanyKeyStats(ticker);
     this.setState({
-      tickerPrice: tickerPrice,
-      companyInfo: companyInfo,
-      companyFinancials: companyFinancials,
-      companyPeers: companyPeers,
-      companyLogo: companyLogo,
-      keyStats: keyStats
+      tickerInfo: {
+        tickerPrice: tickerPrice,
+        companyInfo: companyInfo,
+        companyFinancials: companyFinancials,
+        companyPeers: companyPeers,
+        companyLogo: companyLogo,
+        keyStats: keyStats
+      }
     });
   }
+
+  // async findListInfo(ticker) {
+  //   const tickerPrice = await fetchTickerPrice(ticker);
+  //   const companyFinancials = await fetchCompanyFinancials(ticker);
+  //   const companyInfo = await fetchCompanyInfo(ticker);
+  //   const companyPeers = await fetchCompanyPeers(ticker);
+  //   const companyLogo = await fetchCompanyLogo(ticker);
+  //   const keyStats = await fetchCompanyKeyStats(ticker);
+  //   const allTickerInfo = {
+  //     tickerPrice: tickerPrice,
+  //     companyInfo: companyInfo,
+  //     companyFinancials: companyFinancials,
+  //     companyPeers: companyPeers,
+  //     companyLogo: companyLogo,
+  //     keyStats: keyStats
+  //   };
+  //   return allTickerInfo;
+  // }
 
   handleListChange(e) {
     e.preventDefault();
@@ -109,19 +137,10 @@ class App extends Component {
   }
   async handleListSubmit(e) {
     e.preventDefault();
-    // this.setState = {
-    //   listSelect: this.state.listSelect
-    // };
     const newList = await fetchStockLists(this.state.listSelect);
     console.log("this is the list data: newList", newList);
-    const newListInfo = newList.map(async stock => ({
-      price: await fetchTickerPrice(stock),
-      companyLogo: await fetchCompanyLogo(stock),
-      companyInfo: await fetchCompanyInfo(stock)
-    }));
     this.setState({
-      stockList: newList,
-      stockListInfo: newListInfo
+      stockList: newList
     });
   }
 
@@ -141,17 +160,20 @@ class App extends Component {
     });
   };
 
-  handleQueryClick = e => {
+  handleQueryClick(e) {
     e.preventDefault();
-    console.log("this is handlequeryclick: userInput", this.state.userInput);
+    console.log(
+      "this is handlequeryclick: e.currentTarget.innerText",
+      e.currentTarget.innerText
+    );
+    const userInput = e.currentTarget.innerText;
     this.setState({
       activeOption: 0,
       filteredOptions: [],
       showOptions: false,
-      userInput: e.currentTarget.innerText
+      userInput: userInput
     });
-    this.updateTickerInfo();
-  };
+  }
 
   handleQueryKeyDown = e => {
     const { activeOption, filteredOptions } = this.state;
@@ -182,24 +204,31 @@ class App extends Component {
   //     [name]: value
   //   });
   // }
-  // handleSubmit(e) {
-  //   e.preventDefault();
-  //   const { userInput, stockInfo } = this.state;
-  //   const { name, value } = e.target;
-  //   console.log("target", name);
-  //   this.setState({
-  //     [name]: value
-  //   });
-  //   const tickerIndex = stockInfo.filter(
-  //     company => company.name === userInput || company.symbol === userInput
-  //   );
-  //   this.setState = {
-  //     ticker: tickerIndex.symbol
-  //   };
-  // }
+  handleDetailSubmit(e) {
+    e.preventDefault();
+    const { name, value } = e.target;
+    console.log("target", name);
+    this.setState({
+      [name]: value
+    });
+    const { userInput, stockInfo } = this.state;
+    const tickerIndex = stockInfo.filter(
+      stock =>
+        stock.name.toLowerCase() === userInput.toLowerCase() ||
+        stock.symbol.toLowerCase() === userInput.toLowerCase()
+    );
+    debugger;
+    const newTicker = tickerIndex[0].symbol;
+    this.setState({
+      ticker: newTicker
+    });
+    console.log("this is newTicker", newTicker);
+  }
+
   async componentDidMount() {
     this.fetchStocks();
   }
+
   async fetchStocks() {
     const stockInfo = await fetchStockSymbols();
     console.log("this is stockInfo", stockInfo);
@@ -257,6 +286,7 @@ class App extends Component {
                   onKeyDown={this.handleQueryKeyDown}
                   onChange={this.handleQueryChange}
                   onClick={this.handleQueryClick}
+                  onSubmit={this.handleDetailSubmit}
                   showOptions={this.state.showOptions}
                   userInput={this.state.userInput}
                   filteredOptions={this.state.filteredOptions}
@@ -265,7 +295,6 @@ class App extends Component {
                   onListSubmit={this.handleListSubmit}
                   stockList={this.state.stockList}
                   listSelect={this.state.listSelect}
-                  stockListInfo={this.state.stockListInfo}
                 />
               </div>
             )}
@@ -299,15 +328,22 @@ class App extends Component {
           />
           <Route
             path="/details/:ticker"
-            render={props => (
-              <div>
-                <h1>Hello StockDetails</h1>
-                <StockDetails
-                  ticker={this.state.ticker}
-                  stockInfo={this.state.stockInfo}
-                />
-              </div>
-            )}
+            render={props => {
+              return (
+                <div className="stock-details">
+                  <h1>Hello StockDetails</h1>
+                  <StockDetails
+                    {...props}
+                    ticker={this.state.ticker}
+                    fetchSpecificTickerInfo={this.fetchSpecificTickerInfo}
+                    //fetchStockon loading of stockDetails instead of on submit button
+                    //componentDidMount calls fetchStock and updates app info to display.
+                    //within StockDetails i use props.match.params.ticker
+                    tickerInfo={this.state.tickerInfo}
+                  />
+                </div>
+              );
+            }}
           />
         </main>
         <Footer />

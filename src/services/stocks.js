@@ -1,8 +1,7 @@
 import axios from "axios";
 
 const TOKEN = process.env.REACT_APP_TOKEN;
-const BASE_URL =
-  "https://cors-anywhere.herokuapp.com/https://cloud.iexapis.com";
+const BASE_URL = "https://cloud.iexapis.com";
 // const api = axios.create({
 //   baseURL: BASE_URL,
 //   headers: {

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Autosuggest from "react-autosuggest";
 import PropTypes from "prop-types";
+import { Route, Link } from "react-router-dom";
 
 class Form extends Component {
   render() {
@@ -14,7 +15,9 @@ class Form extends Component {
       activeOption,
       filteredOptions,
       showOptions,
-      userInput
+      userInput,
+      onSubmit,
+      ticker
     } = this.props;
 
     let optionList;
@@ -45,8 +48,8 @@ class Form extends Component {
     }
 
     return (
-      <React.Fragment>
-        <form className="query-search-form">
+      <div className="form-query">
+        <form id="query-search-form">
           <label htmlFor="userInput">Search by Company Name or Symbol</label>
           <input
             type="text"
@@ -54,22 +57,23 @@ class Form extends Component {
             onChange={onChange}
             onKeyDown={onKeyDown}
             value={userInput}
+            onSubmit={onSubmit}
             name="userInput"
           />
-          <input
-            type="submit"
-            value="submit"
-            onSubmit={onClick}
-            className="search-btn"
-          />
-          <div>{optionList}</div>
         </form>
-        {/* <RenderOptionsList
-        activeOption={activeOption}
-        filteredOptions={filteredOptions}
-        showOptions={showOptions}
-      /> */}
-      </React.Fragment>
+        <button
+          form="query-search-form"
+          type="submit"
+          value="submit"
+          onClick={onSubmit}
+          className="search-btn"
+        >
+          <Link to={`/details/hi`} className="more-details-button">
+            Submit
+          </Link>
+        </button>
+        <div className="options">{optionList}</div>
+      </div>
     );
   }
 }

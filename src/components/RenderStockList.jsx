@@ -16,6 +16,7 @@ const RenderStockList = props => {
         </select>
         <input type="submit" />
       </form>
+      <DisplayStockList stockList={props.stockList} />
     </div>
   );
 };
