@@ -8,6 +8,8 @@ class Plank extends Component {
     super();
   }
   render() {
+    console.log("PLANK: ", this.props.ticker);
+
     return (
       <div className="plank-container">
         <Nav />

@@ -28,11 +28,12 @@ export default class StockDetail extends Component {
   }
   render() {
     const { ticker, tickerInfo } = this.props;
+    console.log("STOCK DETAIL: ", ticker);
     return (
       <>
         <Nav />
         <div className="stock-detail">
-          <h1>{this.props.match.params.ticker}</h1>
+          <h1>{ticker}</h1>
           <p>Symbol: {ticker}</p>
           <p>Name: {tickerInfo.companyInfo.companyName}</p>
           <p>Price: {tickerInfo.tickerPrice}</p>

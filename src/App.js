@@ -12,7 +12,7 @@ import {
   fetchStockLists
 } from "./services/stocks";
 import Footer from "./components/Footer";
-import { Route, Link } from "react-router-dom";
+import { Route, Link, withRouter } from "react-router-dom";
 import Welcome from "./components/Welcome";
 import Chest from "./components/Chest";
 import Plank from "./components/Plank";
@@ -97,6 +97,7 @@ class App extends Component {
     const companyPeers = await fetchCompanyPeers(ticker);
     const companyLogo = await fetchCompanyLogo(ticker);
     const keyStats = await fetchCompanyKeyStats(ticker);
+    const historicalPrices = await fetchHistoricalPrices(ticker);
     this.setState({
       tickerInfo: {
         tickerPrice: tickerPrice,
@@ -104,7 +105,8 @@ class App extends Component {
         companyFinancials: companyFinancials,
         companyPeers: companyPeers,
         companyLogo: companyLogo,
-        keyStats: keyStats
+        keyStats: keyStats,
+        historicalPrices: historicalPrices
       }
     });
   }
@@ -217,12 +219,12 @@ class App extends Component {
         stock.name.toLowerCase() === userInput.toLowerCase() ||
         stock.symbol.toLowerCase() === userInput.toLowerCase()
     );
-    debugger;
+    // debugger;
     const newTicker = tickerIndex[0].symbol;
-    this.setState({
+    this.setState((prevState, newState) => ({
       ticker: newTicker
-    });
-    console.log("this is newTicker", newTicker);
+    }));
+    this.props.history.push(`/details/${newTicker}`);
   }
 
   async componentDidMount() {
@@ -243,6 +245,7 @@ class App extends Component {
   }
 
   render() {
+    console.log("app props: ", this.props);
     return (
       <div className="App">
         <main>
@@ -329,6 +332,7 @@ class App extends Component {
           <Route
             path="/details/:ticker"
             render={props => {
+              console.log("DETAIL TICKER: ", this.state.ticker);
               return (
                 <div className="stock-details">
                   <h1>Hello StockDetails</h1>
@@ -336,9 +340,6 @@ class App extends Component {
                     {...props}
                     ticker={this.state.ticker}
                     fetchSpecificTickerInfo={this.fetchSpecificTickerInfo}
-                    //fetchStockon loading of stockDetails instead of on submit button
-                    //componentDidMount calls fetchStock and updates app info to display.
-                    //within StockDetails i use props.match.params.ticker
                     tickerInfo={this.state.tickerInfo}
                   />
                 </div>
@@ -352,4 +353,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default withRouter(App);

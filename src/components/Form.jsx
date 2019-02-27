@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Autosuggest from "react-autosuggest";
 import PropTypes from "prop-types";
-import { Route, Link } from "react-router-dom";
+import { Route, Link, withRouter } from "react-router-dom";
 
 class Form extends Component {
   render() {
@@ -19,7 +19,7 @@ class Form extends Component {
       onSubmit,
       ticker
     } = this.props;
-
+    console.log("FORM TICKER: ", this.props);
     let optionList;
     if (showOptions && userInput) {
       if (filteredOptions.length) {
@@ -31,7 +31,12 @@ class Form extends Component {
                 className = "option-active";
               }
               return (
-                <li className={className} key={optionName} onClick={onClick}>
+                <li
+                  id="list-els"
+                  className={className}
+                  key={`${optionName}-${index}`}
+                  onClick={onClick}
+                >
                   {optionName}
                 </li>
               );
@@ -49,35 +54,37 @@ class Form extends Component {
 
     return (
       <div className="form-query">
-        <form id="query-search-form">
-          <label htmlFor="userInput">Search by Company Name or Symbol</label>
-          <input
-            type="text"
-            className="search-box"
-            onChange={onChange}
-            onKeyDown={onKeyDown}
-            value={userInput}
-            onSubmit={onSubmit}
-            name="userInput"
-          />
-        </form>
-        <button
-          form="query-search-form"
-          type="submit"
-          value="submit"
-          onClick={onSubmit}
-          className="search-btn"
-        >
-          <Link to={`/details/hi`} className="more-details-button">
+        <div className="form-container">
+          <form id="query-search-form">
+            <label htmlFor="userInput">Search by Company Name or Symbol</label>
+            <input
+              type="text"
+              className="search-box"
+              onChange={onChange}
+              onKeyDown={onKeyDown}
+              value={userInput}
+              onSubmit={onSubmit}
+              name="userInput"
+            />
+          </form>
+          <button
+            form="query-search-form"
+            type="submit"
+            value="submit"
+            onClick={onSubmit}
+            className="search-btn"
+          >
+            {/* <Link to={`/details/${ticker}`} className="more-details-button"> */}
             Submit
-          </Link>
-        </button>
-        <div className="options">{optionList}</div>
+            {/* </Link> */}
+          </button>
+        </div>
+        <div className="options-container">{optionList}</div>
       </div>
     );
   }
 }
-export default Form;
+export default withRouter(Form);
 
 {
   /* //this autocomplete has been researched - but has focused info from
