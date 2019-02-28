@@ -3,7 +3,7 @@ import Cards from "./Cards";
 
 const DisplayStockList = props => {
   const { stockList } = props;
-  //console.log("stockList: renderstock", stockList);
+  console.log("stockList: renderstock", stockList);
   return (
     <div className="stock-list">
       {stockList &&

@@ -3,11 +3,16 @@ import { Route, Link, withRouter } from "react-router-dom";
 
 const MarketTimer = props => {
   const marketOpen = () => {
-    let openDate = new Date.parse(props.openDate[0].openTime);
-    let date = new Date.parse();
-    return openDate > date;
+    if (!props.stockList[0]) {
+      return false;
+    } else {
+      const date = new Date().getTime();
+      let openDate = new Date(props.stockList[0].openTime).getTime();
+      return openDate > date;
+    }
   };
-
+  console.log("MARKETOPEN", marketOpen());
+  console.log(props.stockList[0]);
   return (
     <div className="market-container">
       {marketOpen ? (

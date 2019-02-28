@@ -48,7 +48,7 @@ class App extends Component {
       filteredOptions: [],
       showOptions: false,
 
-      listSelect: "",
+      listSelect: "mostActive",
       stockList: []
     };
 
@@ -166,7 +166,6 @@ class App extends Component {
     );
 
     console.log("tickerIndex", tickerIndex);
-    // debugger;
     const newTicker = tickerIndex[0].symbol;
     this.setState((prevState, newState) => ({
       ticker: newTicker,
@@ -188,7 +187,6 @@ class App extends Component {
         stock.name.toLowerCase() === userInput.toLowerCase() ||
         stock.symbol.toLowerCase() === userInput.toLowerCase()
     );
-    // debugger;
     const newTicker = tickerIndex[0].symbol;
     this.setState((prevState, newState) => ({
       ticker: newTicker,
@@ -203,17 +201,15 @@ class App extends Component {
 
   async fetchStocks() {
     const stockInfo = await fetchStockSymbols();
-    console.log("this is stockInfo", stockInfo);
     const tickerSymbols = stockInfo.map(stock => stock.symbol);
     const companyNames = stockInfo.map(stock => stock.name);
     const newList = await fetchStockLists(this.state.listSelect);
-    this.setState({
+    this.setState((prevState, newState) => ({
       stockInfo: stockInfo,
       autocompleteOptions: [...tickerSymbols, ...companyNames],
       formQuery: "",
       stockList: newList
-    });
-    console.log("this is autocompleteOptions", this.state.autocompleteOptions);
+    }));
   }
 
   render() {

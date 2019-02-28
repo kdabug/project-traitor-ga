@@ -10,12 +10,12 @@ const Cards = props => {
       <h2>{props.stock.name}</h2>
       <div className="card-prices">
         <h2>
-          Today's High: <span className="high-price">{props.stock.high}</span>
+          Today's High: $<span className="high-price">{props.stock.high}</span>
         </h2>
         <h2>
-          Today's Low: <span className="low-price">{props.stock.low}</span>
+          Today's Low: $<span className="low-price">{props.stock.low}</span>
         </h2>
-        <h2>Current Price: {props.stock.latestPrice}</h2>
+        <h2>Current Price: ${props.stock.latestPrice}</h2>
       </div>
       <div className="cards-buttons">
         <button

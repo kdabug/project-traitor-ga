@@ -23,9 +23,7 @@ class Compass extends Component {
 
   async fetchHistoryData() {
     const tickerVal = this.props.ticker ? this.props.ticker : "AAPL";
-
     const historicalPrices = await fetchHistoricalPrices(tickerVal, "1d");
-    // console.log("compass historical prices", historicalPrices);
     this.setState((prevState, newState) => ({
       historicalPrices: historicalPrices
     }));
