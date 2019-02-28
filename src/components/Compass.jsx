@@ -1,76 +1,70 @@
 import React, { Component } from "react";
 import Nav from "./Nav";
-import { Chart } from "react-charts";
+//import { LineChart } from "react-easy-chart";
 import fetchHistoricalPrices from "../services/stocks";
 import Form from "./Form";
+import { Route, Link, withRouter } from "react-router-dom"; //import Tooltip from "@material-ui/core/Tooltip";
+
+import ReactChartkick, { LineChart, PieChart } from "react-chartkick";
+import Chart from "chart.js";
+
+ReactChartkick.addAdapter(Chart);
 class Compass extends Component {
   constructor() {
     super();
     this.state = {
-      historicalPrices: []
+      historicalPrices: [],
+      chartData: [],
+      testTicker: null
     };
-    // this.fetchHistoryData = this.fetchHistoryData.bind(this);
+    this.compileChartData = this.compileChartData.bind(this);
+    this.fetchHistoryData = this.fetchHistoryData.bind(this);
   }
 
-  // async fetchHistoryData(e) {
-  //   e.preventDefault();
-  //   this.props.
-  //   const historicalPrices = await fetchHistoricalPrices(
-  //     this.props.match.params.ticker,
-  //     "1d"
-  //   );
-  //   console.log("compass historical prices", historicalPrices);
-  //   this.setState((prevState, newState) => ({
-  //     historicalPrices: historicalPrices
-  //   }));
-  // }
+  async fetchHistoryData() {
+    const tickerVal = this.props.ticker ? this.props.ticker : "AAPL";
 
-  async componentDidMount() {
-    if (this.props.match.params.ticker) {
-      const historicalPrices = await fetchHistoricalPrices(
-        this.props.match.params.ticker,
-        "1d"
-      );
-      console.log("compass historical prices", historicalPrices);
-      this.setState((prevState, newState) => ({
-        historicalPrices: historicalPrices
-      }));
-    } else {
-      const historicalPrices = await fetchHistoricalPrices("AAPL", "1d");
-      const chartData = historicalPrices.map((timeStamp, el) => {
-        return {
-          x: timestamp
-        };
-      });
-      console.log("compass historical prices", historicalPrices);
-      this.setState((prevState, newState) => ({
-        historicalPrices: historicalPrices
-      }));
+    const historicalPrices = await fetchHistoricalPrices(tickerVal, "1d");
+    // console.log("compass historical prices", historicalPrices);
+    this.setState((prevState, newState) => ({
+      historicalPrices: historicalPrices
+    }));
+    if (this.state.historicalPrices.length) {
+      this.compileChartData();
     }
   }
+
+  async componentDidMount() {
+    this.fetchHistoryData();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.ticker !== this.props.ticker) {
+      console.log("FETCHING HISTORY DATA!", this.props.ticker);
+      this.fetchHistoryData();
+    }
+  }
+
+  compileChartData() {
+    const chartData = this.state.historicalPrices.map((timeStamp, el) => [
+      timeStamp.label,
+      timeStamp.average
+    ]);
+    this.setState((prevState, newState) => ({
+      chartData: chartData
+    }));
+    console.log("chartData", chartData);
+  }
+
   render() {
     const lineChart = (
-      <div
-        style={{
-          width: "400px",
-          height: "300px"
-        }}
-      >
-        <Chart
-          data={[
-            {
-              label: "Series 1",
-              data: [[0, 1], [1, 2], [2, 4], [3, 2], [4, 7]]
-            },
-            {
-              label: "Series 2",
-              data: [[0, 3], [1, 1], [2, 5], [3, 6], [4, 4]]
-            }
-          ]}
-          axes={[
-            { primary: true, type: "linear", position: "bottom" },
-            { type: "linear", position: "left" }
-          ]}
+      <div>
+        <LineChart
+          data={this.state.chartData}
+          min={null}
+          max={null}
+          width={"800px"}
+          height={"400px"}
         />
       </div>
     );
@@ -99,4 +93,4 @@ class Compass extends Component {
   }
 }
 
-export default Compass;
+export default withRouter(Compass);

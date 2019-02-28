@@ -198,7 +198,7 @@ class App extends Component {
   }
 
   async componentDidMount() {
-    //this.fetchStocks();
+    this.fetchStocks();
   }
 
   async fetchStocks() {
@@ -265,12 +265,10 @@ class App extends Component {
             path="/compass"
             render={props => (
               <Compass
-                {...props}
                 ticker={this.state.ticker}
                 fetchSpecificTickerInfo={this.fetchSpecificTickerInfo}
                 tickerInfo={this.state.tickerInfo}
                 stockInfo={this.state.stockInfo}
-                ticker={this.state.ticker}
                 onKeyDown={this.handleQueryKeyDown}
                 onChange={this.handleQueryChange}
                 onClick={this.handleQueryClick}

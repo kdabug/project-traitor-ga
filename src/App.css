@@ -236,6 +236,8 @@ nav a {
   margin-top: 20px;
   align-items: center;
   justify-content: center;
+  height: auto;
+  width: 100vw;
 }
 
 .form-container {
