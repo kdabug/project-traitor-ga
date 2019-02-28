@@ -1,23 +1,24 @@
 "use strict";
 import React from "react";
-import { Route, Link } from "react-router-dom";
+import { Route, Link, withRouter } from "react-router-dom";
 
 const Welcome = props => {
   return (
-    <div className="welcome-container">
-      <div className="welcome-script">
-        <h2 className="subtitle">
-          for those who choose to enter:
-          <br /> we send pirates, theives and <br />{" "}
-          <span className="title">traitors</span>
-          <br />
-          to the stocks.
-        </h2>
-        <div className="welcome-button-container">
-          <button className="welcome-button">
-            <Link to="/chest" id="start-trading-link">
-              Start Trading
-            </Link>
+    <div className="layer">
+      <div className="welcome-container">
+        <div className="welcome-script">
+          <h2 className="subtitle">
+            be ye warned:
+            <br /> we send pirates, <br />
+            theives &<br /> <span className="title">traitors</span>
+            <br />
+            to the stocks.
+          </h2>
+          <button
+            className="welcome-button"
+            onClick={() => props.history.push("/chest")}
+          >
+            Start Trading
           </button>
         </div>
       </div>
@@ -25,4 +26,4 @@ const Welcome = props => {
   );
 };
 
-export default Welcome;
+export default withRouter(Welcome);

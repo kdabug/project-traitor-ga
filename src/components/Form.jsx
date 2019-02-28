@@ -1,6 +1,4 @@
 import React, { Component } from "react";
-import Autosuggest from "react-autosuggest";
-import PropTypes from "prop-types";
 import { Route, Link, withRouter } from "react-router-dom";
 
 class Form extends Component {
@@ -65,6 +63,7 @@ class Form extends Component {
               value={userInput}
               onSubmit={onSubmit}
               name="userInput"
+              autoComplete="off"
             />
           </form>
           <button
@@ -86,8 +85,6 @@ class Form extends Component {
 }
 export default withRouter(Form);
 
-{
-  /* //this autocomplete has been researched - but has focused info from
+/* //this autocomplete has been researched - but has focused info from
 //https://alligator.io/react/react-autocomplete/ and
 //https://blog.bitsrc.io/building-a-react-autocomplete-component-from-scratch-3f4d5618aa14 */
-}

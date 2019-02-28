@@ -145,10 +145,11 @@ export {
   fetchTickerPrice,
   fetchCompanyInfo,
   fetchCompanyFinancials,
-  fetchHistoricalPrices,
   fetchCompanyPeers,
   fetchCompanyLogo,
   fetchCompanyKeyStats,
   fetchStockSymbols,
   fetchStockLists
 };
+
+export default fetchHistoricalPrices;

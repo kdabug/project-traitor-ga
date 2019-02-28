@@ -8,17 +8,13 @@ body {
   margin: 0;
   padding: 0;
   /*  Background fallback in case of IE8 & down, or in case video doens't load, such as with slower connections  */
-  background: grey;
-  font-family: "Inconsolata", monospace;
-}
-
-#ticker {
-  display: inline;
+  background: rgba(247, 224, 177, 0.9);
+  font-family: "IM Fell English", serif;
 }
 
 nav {
-  background-color: black;
-  color: white;
+  background-color: rgba(85, 72, 46, 0.9);
+  color: rgba(247, 224, 177, 0.9);
   display: flex;
   top: 0px;
   position: fixed;
@@ -31,34 +27,61 @@ nav {
 }
 
 nav a {
-  color: white;
+  color: rgba(247, 224, 177, 0.9);
   padding: 10px;
   margin: 10px 10px 10px 10px;
   display: flex;
   text-decoration: none;
   order: 1;
+  font-family: "IM Fell English SC", serif;
 }
 
-/* video {
-  position: fixed;
-  right: 0;
-  bottom: 0;
-  min-width: 100%;
-  min-height: 100%;
-  width: auto;
-  height: auto;
-  z-index: -100;
+.layer {
+  background: linear-gradient(
+    320deg,
+    rgba(245, 28, 3, 0.9),
+    rgba(15, 13, 13, 0.9)
+  );
+  order: -1;
+  background-size: 400% 400%;
+  -webkit-animation: shimmer 4s alternate ease infinite;
+  -moz-animation: shimmer 4s alternate ease infinite;
+  animation: shimmer 4s alternate ease infinite;
 }
-#background-video {
-  position: fixed;
-  right: 0;
-  bottom: 0;
-  min-width: 100%;
-  min-height: 100%;
-  width: auto;
-  height: auto;
-  z-index: -100;
-} */
+@-webkit-keyframes shimmer {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+@-moz-keyframes shimmer {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+@keyframes shimmer {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+/* idea and code snippets of above shimmer from https://codepen.io/LaunaKay/pen/xVGxrW */
 
 .welcome-container {
   margin: 0;
@@ -67,8 +90,11 @@ nav a {
   height: 100vh;
   background-repeat: no-repeat;
   background-size: cover;
-  background-color: red;
+  /* background-position-x: 25vw; */
   background-image: url("./images/calico-jack.png");
+  align-content: center;
+  justify-content: center;
+  text-align: center;
 }
 
 .welcome-script {
@@ -83,7 +109,8 @@ nav a {
   flex-direction: column;
 }
 .welcome-button {
-  background-color: rgba(245, 237, 237, 0.61);
+  cursor: pointer;
+  background-color: rgba(85, 72, 46, 0.6);
   border: none;
   color: white;
   padding: 15px 32px;
@@ -93,29 +120,26 @@ nav a {
   display: inline-block;
   font-size: 20px;
   font-family: "Inconsolata", monospace;
-}
-
-.welcome-button-container {
   position: relative;
-  bottom: -120px;
-  padding: 15px 32px;
+  bottom: -50px;
 }
 
-.welcome-button a {
-  text-decoration: none;
-  color: white;
-  margin: 50px;
+.welcome-button:hover {
+  border: 1px solid red;
+  transform: scale(0.95);
+  transition: transform 0.2s;
 }
 
 .title {
-  color: white;
+  color: rgba(247, 224, 177, 0.9);
   font-family: "IM Fell English SC", serif;
-  font-size: 70px;
+  font-size: 90px;
+  line-height: 85px;
 }
 
 .subtitle {
   font-family: "IM Fell English", serif;
-  color: lightgrey;
+  color: rgba(202, 178, 130, 0.9);
 }
 
 .chest-container {
@@ -129,11 +153,22 @@ nav a {
   height: 100vh;
   flex-direction: column;
   position: relative;
-  top: -120px;
 }
-
+.chest-container::after {
+  background-image: url("./images/pillory.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  margin-top: 60px;
+  content: "";
+  opacity: 0.3;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  z-index: -1;
+}
 .plank-container {
-  margin: 0;
   margin-top: 100px;
   padding: 0;
   display: flex;
@@ -142,17 +177,65 @@ nav a {
   height: 100vh;
   flex-direction: column;
 }
+.stock-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  font-family: "Inconsolata", monospace;
+}
+.cards-container {
+  margin: 5px;
+  background-color: rgba(233, 203, 203, 0.61);
+  border-radius: 20px;
+}
+.cards-container h1 {
+  font-size: 25px;
+}
+.cards-container h2 {
+  font-size: 20px;
+}
+.high-price {
+  color: green;
+}
+.low-price {
+  color: red;
+}
+.cards-buttons {
+  margin: 5px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-content: flex-end;
+  align-self: flex-end;
+}
+
+.card-button-style {
+  background-color: rgba(245, 237, 237, 0.61);
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  border-radius: 15px;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 20px;
+  font-family: "Inconsolata", monospace;
+}
 
 .compass-container {
-  margin: 0;
+  margin-top: 75px;
   padding: 0;
   display: flex;
-  justify-content: center;
   text-align: center;
   width: 100vw;
   height: 100vh;
   flex-direction: column;
   position: relative;
+}
+.chart-container {
+  display: flex;
+  margin-top: 20px;
+  align-items: center;
+  justify-content: center;
 }
 
 .form-container {
@@ -163,11 +246,12 @@ nav a {
 }
 
 .form-query {
-  width: 100%;
-  height: 40vh;
+  width: 90%;
   border: red solid 2px;
   margin: 5px;
   padding: 10px;
+  align-self: center;
+  font-family: "Inconsolata", monospace;
 }
 
 input.search-box {
@@ -196,22 +280,27 @@ input.search-box {
 }
 
 .footer a {
-  position: absolute;
-  display: flex;
   text-align: center;
   bottom: 0px;
   text-decoration: none;
-  color: white;
+  font-family: "Inconsolata", monospace;
+  background-color: rgba(85, 72, 46, 0.9);
+  color: rgba(247, 224, 177, 0.9);
+  display: flex;
+  position: fixed;
+  width: 100%;
+  height: 20px;
+  align-content: space-around;
+  justify-content: center;
+  order: 1;
+  text-decoration: none;
 }
 
 .stock-details {
   margin-top: 100px;
+  font-family: "Inconsolata", monospace;
 }
 
-li#list-els:nth-of-type(1n + 15) {
-  display: none;
-  width: 90vw;
-}
 li#list-els:nth-of-type(1n + 15) {
   display: none;
 }

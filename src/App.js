@@ -4,7 +4,6 @@ import {
   fetchTickerPrice,
   fetchCompanyInfo,
   fetchCompanyFinancials,
-  fetchHistoricalPrices,
   fetchCompanyPeers,
   fetchCompanyLogo,
   fetchCompanyKeyStats,
@@ -30,7 +29,6 @@ class App extends Component {
         tickerPrice: 0,
         companyInfo: {},
         companyFinancials: {},
-        HistoricalPrices: [],
         companyPeers: [],
         companyLogo: {},
         keyStats: {}
@@ -56,39 +54,14 @@ class App extends Component {
 
     this.handleListSubmit = this.handleListSubmit.bind(this);
     this.handleListChange = this.handleListChange.bind(this);
-    //this.updateTickerInfo = this.updateTickerInfo.bind(this);
     this.fetchSpecificTickerInfo = this.fetchSpecificTickerInfo.bind(this);
-    // this.findListInfo = this.findListInfo.bind(this);
     this.handleDetailSubmit = this.handleDetailSubmit.bind(this);
+    this.handleCompassSubmit = this.handleCompassSubmit.bind(this);
     this.fetchStocks = this.fetchStocks.bind(this);
     this.handleQueryChange = this.handleQueryChange.bind(this);
     this.handleQueryClick = this.handleQueryClick.bind(this);
     this.handleQueryKeyDown = this.handleQueryKeyDown.bind(this);
   }
-
-  // updateTickerInfo() {
-  //   const { userInput } = this.state;
-  //   const { stockInfo } = this.state;
-  //   const ticker = stockInfo.filter(stock => {
-  //     if (
-  //       stock.name.toLowerCase() === userInput.toLowerCase() ||
-  //       stock.symbol.toLowerCase() === userInput.toLowerCase()
-  //     ) {
-  //       return stock;
-  //     }
-  //   });
-  //   debugger;
-  //   console.log(
-  //     "This is update ticker info ticker:",
-  //     ticker,
-  //     "and userInput:",
-  //     userInput
-  //   );
-  //   this.setState({
-  //     ticker: ticker
-  //   });
-  //   this.fetchSpecificTickerInfo();
-  // }
 
   async fetchSpecificTickerInfo(ticker) {
     const tickerPrice = await fetchTickerPrice(ticker);
@@ -97,7 +70,6 @@ class App extends Component {
     const companyPeers = await fetchCompanyPeers(ticker);
     const companyLogo = await fetchCompanyLogo(ticker);
     const keyStats = await fetchCompanyKeyStats(ticker);
-    const historicalPrices = await fetchHistoricalPrices(ticker);
     this.setState({
       tickerInfo: {
         tickerPrice: tickerPrice,
@@ -105,29 +77,10 @@ class App extends Component {
         companyFinancials: companyFinancials,
         companyPeers: companyPeers,
         companyLogo: companyLogo,
-        keyStats: keyStats,
-        historicalPrices: historicalPrices
+        keyStats: keyStats
       }
     });
   }
-
-  // async findListInfo(ticker) {
-  //   const tickerPrice = await fetchTickerPrice(ticker);
-  //   const companyFinancials = await fetchCompanyFinancials(ticker);
-  //   const companyInfo = await fetchCompanyInfo(ticker);
-  //   const companyPeers = await fetchCompanyPeers(ticker);
-  //   const companyLogo = await fetchCompanyLogo(ticker);
-  //   const keyStats = await fetchCompanyKeyStats(ticker);
-  //   const allTickerInfo = {
-  //     tickerPrice: tickerPrice,
-  //     companyInfo: companyInfo,
-  //     companyFinancials: companyFinancials,
-  //     companyPeers: companyPeers,
-  //     companyLogo: companyLogo,
-  //     keyStats: keyStats
-  //   };
-  //   return allTickerInfo;
-  // }
 
   handleListChange(e) {
     e.preventDefault();
@@ -198,21 +151,37 @@ class App extends Component {
     }
   };
 
-  // handleChange(e) {
-  //   // e.preventDefault();
-  //   const { name, value } = e.target;
-  //   console.log("target", name);
-  //   this.setState({
-  //     [name]: value
-  //   });
-  // }
   handleDetailSubmit(e) {
     e.preventDefault();
     const { name, value } = e.target;
-    console.log("target", name);
-    this.setState({
+    console.log("target", name, value);
+    this.setState((prevState, newState) => ({
       [name]: value
-    });
+    }));
+    const { userInput, stockInfo } = this.state;
+    const tickerIndex = stockInfo.filter(
+      stock =>
+        stock.name.toLowerCase() === userInput.toLowerCase() ||
+        stock.symbol.toLowerCase() === userInput.toLowerCase()
+    );
+
+    console.log("tickerIndex", tickerIndex);
+    // debugger;
+    const newTicker = tickerIndex[0].symbol;
+    this.setState((prevState, newState) => ({
+      ticker: newTicker,
+      userInput: ""
+    }));
+    this.props.history.push(`/details/${newTicker}`);
+  }
+
+  handleCompassSubmit(e) {
+    e.preventDefault();
+    const { name, value } = e.target;
+    console.log("target", name);
+    this.setState((prevState, newState) => ({
+      [name]: value
+    }));
     const { userInput, stockInfo } = this.state;
     const tickerIndex = stockInfo.filter(
       stock =>
@@ -222,13 +191,14 @@ class App extends Component {
     // debugger;
     const newTicker = tickerIndex[0].symbol;
     this.setState((prevState, newState) => ({
-      ticker: newTicker
+      ticker: newTicker,
+      userInput: ""
     }));
-    this.props.history.push(`/details/${newTicker}`);
+    this.props.history.push(`/compass/${newTicker}`);
   }
 
   async componentDidMount() {
-    this.fetchStocks();
+    //this.fetchStocks();
   }
 
   async fetchStocks() {
@@ -236,10 +206,12 @@ class App extends Component {
     console.log("this is stockInfo", stockInfo);
     const tickerSymbols = stockInfo.map(stock => stock.symbol);
     const companyNames = stockInfo.map(stock => stock.name);
+    const newList = await fetchStockLists(this.state.listSelect);
     this.setState({
       stockInfo: stockInfo,
       autocompleteOptions: [...tickerSymbols, ...companyNames],
-      formQuery: ""
+      formQuery: "",
+      stockList: newList
     });
     console.log("this is autocompleteOptions", this.state.autocompleteOptions);
   }
@@ -249,105 +221,86 @@ class App extends Component {
     return (
       <div className="App">
         <main>
-          <Route
-            exact
-            path="/"
-            render={() => (
-              <div>
-                <Welcome />
-              </div>
-            )}
-          />
+          <Route exact path="/" render={() => <Welcome />} />
           <Route
             path="/chest"
             render={props => (
-              <div>
-                <h1>Hello Chest</h1>
-                <Chest
-                  currentBooty={this.state.currentBooty}
-                  currentInventory={this.state.currentInventory}
-                  stockInfo={this.state.stockInfo}
-                  ticker={this.state.ticker}
-                  onKeyDown={this.handleQueryKeyDown}
-                  onChange={this.handleQueryChange}
-                  onClick={this.handleQueryClick}
-                  showOptions={this.state.showOptions}
-                  userInput={this.state.userInput}
-                  filteredOptions={this.state.filteredOptions}
-                />
-              </div>
+              <Chest
+                currentBooty={this.state.currentBooty}
+                currentInventory={this.state.currentInventory}
+                stockInfo={this.state.stockInfo}
+                ticker={this.state.ticker}
+                onKeyDown={this.handleQueryKeyDown}
+                onChange={this.handleQueryChange}
+                onClick={this.handleQueryClick}
+                showOptions={this.state.showOptions}
+                userInput={this.state.userInput}
+                filteredOptions={this.state.filteredOptions}
+              />
             )}
           />
           <Route
             path="/plank"
             render={props => (
-              <div>
-                <h1>Hello Plank</h1>
-                <Plank
-                  stockInfo={this.state.stockInfo}
-                  ticker={this.state.ticker}
-                  onKeyDown={this.handleQueryKeyDown}
-                  onChange={this.handleQueryChange}
-                  onClick={this.handleQueryClick}
-                  onSubmit={this.handleDetailSubmit}
-                  showOptions={this.state.showOptions}
-                  userInput={this.state.userInput}
-                  filteredOptions={this.state.filteredOptions}
-                  activeOption={this.state.activeOption}
-                  onListChange={this.handleListChange}
-                  onListSubmit={this.handleListSubmit}
-                  stockList={this.state.stockList}
-                  listSelect={this.state.listSelect}
-                />
-              </div>
+              <Plank
+                stockInfo={this.state.stockInfo}
+                ticker={this.state.ticker}
+                onKeyDown={this.handleQueryKeyDown}
+                onChange={this.handleQueryChange}
+                onClick={this.handleQueryClick}
+                onDetailSubmit={this.handleDetailSubmit}
+                onCompassSubmit={this.handleCompassSubmit}
+                showOptions={this.state.showOptions}
+                userInput={this.state.userInput}
+                filteredOptions={this.state.filteredOptions}
+                activeOption={this.state.activeOption}
+                onListChange={this.handleListChange}
+                onListSubmit={this.handleListSubmit}
+                stockList={this.state.stockList}
+                listSelect={this.state.listSelect}
+              />
             )}
           />
           <Route
             path="/compass"
-            render={() => (
-              <div>
-                <h1>Hello Compass</h1>
-                <Compass />
-              </div>
+            render={props => (
+              <Compass
+                {...props}
+                ticker={this.state.ticker}
+                fetchSpecificTickerInfo={this.fetchSpecificTickerInfo}
+                tickerInfo={this.state.tickerInfo}
+                stockInfo={this.state.stockInfo}
+                ticker={this.state.ticker}
+                onKeyDown={this.handleQueryKeyDown}
+                onChange={this.handleQueryChange}
+                onClick={this.handleQueryClick}
+                onDetailSubmit={this.handleDetailSubmit}
+                onCompassSubmit={this.handleCompassSubmit}
+                showOptions={this.state.showOptions}
+                userInput={this.state.userInput}
+                filteredOptions={this.state.filteredOptions}
+                activeOption={this.state.activeOption}
+              />
             )}
           />
-          <Route
-            path="/records"
-            render={() => (
-              <div>
-                <h1>Hello Records</h1>
-                <Records />
-              </div>
-            )}
-          />
-          <Route
-            path="/profile"
-            render={() => (
-              <div>
-                <h1>Hello Profile</h1>
-                <Profile />
-              </div>
-            )}
-          />
+          <Route path="/records" render={() => <Records />} />
+          <Route path="/profile" render={() => <Profile />} />
           <Route
             path="/details/:ticker"
             render={props => {
               console.log("DETAIL TICKER: ", this.state.ticker);
               return (
-                <div className="stock-details">
-                  <h1>Hello StockDetails</h1>
-                  <StockDetails
-                    {...props}
-                    ticker={this.state.ticker}
-                    fetchSpecificTickerInfo={this.fetchSpecificTickerInfo}
-                    tickerInfo={this.state.tickerInfo}
-                  />
-                </div>
+                <StockDetails
+                  {...props}
+                  ticker={this.state.ticker}
+                  fetchSpecificTickerInfo={this.fetchSpecificTickerInfo}
+                  tickerInfo={this.state.tickerInfo}
+                />
               );
             }}
           />
         </main>
-        <Footer />
+        <Footer show={!this.props.match.isExact} />
       </div>
     );
   }

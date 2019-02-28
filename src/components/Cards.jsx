@@ -1,25 +1,38 @@
 import React from "react";
-import { Route, Link } from "react-router-dom";
+import { Route, Link, withRouter } from "react-router-dom";
 
 const Cards = props => {
   return (
     <div className="cards-container">
-      <h1>Name: {props.stock.companyName}</h1>
-      <h1>Symbol: {props.stock.symbol}</h1>
-      <h2>Price: {props.stock.latestPrice}</h2>
-      <div
-        className="card-logo"
-        style={{ background_image: `${props.stock.companyLogo}` }}
-      />
-      <button>Buy</button>
-      <button>Sell</button>
-      {/* <button>
-        <Link to="/details/{ticker}" id="start-trading-link">
-          Start Trading
-        </Link>
-      </button> */}
+      <div className="card-symbol">
+        <h1>{props.stock.symbol}</h1>
+      </div>
+      <h2>{props.stock.name}</h2>
+      <div className="card-prices">
+        <h2>
+          Today's High: <span className="high-price">{props.stock.high}</span>
+        </h2>
+        <h2>
+          Today's Low: <span className="low-price">{props.stock.low}</span>
+        </h2>
+        <h2>Current Price: {props.stock.latestPrice}</h2>
+      </div>
+      <div className="cards-buttons">
+        <button
+          className="card-button"
+          onClick={() => props.history.push(`/details/${props.stock.symbol}`)}
+        >
+          Details
+        </button>
+        <button
+          className="card-button"
+          onClick={() => props.history.push(`/compass/${props.stock.symbol}`)}
+        >
+          Compass
+        </button>
+      </div>
     </div>
   );
 };
 
-export default Cards;
+export default withRouter(Cards);

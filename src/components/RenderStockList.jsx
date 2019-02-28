@@ -3,7 +3,7 @@ import DisplayStockList from "./DisplayStockList";
 
 const RenderStockList = props => {
   return (
-    <div className="stock-list">
+    <div className="form-stock-list">
       <p>Search Stocks by Currated Lists:</p>
       <form onSubmit={props.onListSubmit}>
         <select name="listSelect" onChange={props.onListChange}>
