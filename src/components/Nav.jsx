@@ -40,11 +40,7 @@ class Nav extends React.Component {
             <Link to="/">Enter</Link>,
             <Link to="/chest">Chest</Link>,
             <Link to="/plank">Plank</Link>,
-            <Link to="/compass">Compass</Link>,
-            {
-              /* <Link to="/locker">Locker</Link>,
-            <Link to="/records">Records</Link> */
-            }
+            <Link to="/compass">Compass</Link>
           ].map(text => (
             <ListItem button key={text}>
               <ListItemText primary={text} className="nav-items" />
