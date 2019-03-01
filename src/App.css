@@ -445,12 +445,12 @@ nav a {
 }
 
 .wave {
-  width: 160%;
-  height: 170%;
+  width: 150%;
+  height: 160%;
   position: absolute;
-  top: -27%;
-  left: 40%;
-  margin-left: -500px;
+  top: -20%;
+  left: 30%;
+  margin-left: -600px;
   margin-top: -500px;
   border-radius: 35%;
   background: rgba(247, 224, 177, 0.9);

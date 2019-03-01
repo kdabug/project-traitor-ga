@@ -55,19 +55,25 @@ handleCompassSubmit(e) {
 and code that handles rendering the compass page if it is updated
 
 ```
-constructor() {
-    super();
+constructor(props) {
+    super(props);
+
     this.state = {
       historicalPrices: [],
-      chartData: [],
-      testTicker: null
+      chartData: []
     };
     this.compileChartData = this.compileChartData.bind(this);
     this.fetchHistoryData = this.fetchHistoryData.bind(this);
+    this.createTickerVal = this.createTickerVal.bind(this);
+  }
+  createTickerVal() {
+    const path = this.props.location.pathname.split("/")[2];
+    return this.props.ticker || path || "AAPL";
   }
 
   async fetchHistoryData() {
-    const tickerVal = this.props.ticker ? this.props.ticker : "AAPL";
+    const tickerVal = this.createTickerVal();
+    // tickerVal = tickerVal ? this.props.ticker : "AAPL";
     const historicalPrices = await fetchHistoricalPrices(tickerVal, "1d");
     this.setState((prevState, newState) => ({
       historicalPrices: historicalPrices

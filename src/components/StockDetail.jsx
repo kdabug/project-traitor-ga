@@ -27,12 +27,6 @@ class StockDetail extends Component {
     await this.props.fetchSpecificTickerInfo(this.props.match.params.ticker);
   }
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.ticker !== this.props.ticker) {
-      console.log("FETCHING STOCK", this.props.ticker);
-      this.fetchHistoryData();
-    }
-  }
   render() {
     const { ticker, tickerInfo } = this.props;
     console.log("STOCK DETAIL ticker: ", ticker);

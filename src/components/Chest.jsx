@@ -1,28 +1,66 @@
-import React from "react";
+import React, { Component } from "react";
 import Nav from "./Nav";
+import ChooseBounty from "./ChooseBounty";
+import Form from "./Form";
 
-const Chest = props => {
-  return (
-    <div className="chest-container">
-      <Nav />
-      <div className="page-titles">
-        <h1>chose the route of the traitor, have ye?</h1>
-        <h2>yer treasure chest</h2>
-      </div>
-      <div className="chest-currents-display">
-        <h2>Yer Bounty: {props.currentBooty}</h2>
+class Chest extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      howManyCanIBuy: ""
+    };
+  }
+  createHowManyCanIBuy() {
+    const currentPrice = this.props.tickerInfo.tickerPrice;
+    const currentBounty = this.props.currentBounty;
+    return currentPrice / currentBounty;
+  }
+  render() {
+    console.log("CHEST PROPS: ", this.props);
+    return (
+      <div className="chest-container">
+        <Nav />
+        <div className="page-titles">
+          <h1>chose the route of the traitor, have ye?</h1>
+          <h2>yer treasure chest</h2>
+        </div>
+
         <h2>Treasurey:</h2>
         <ul className="inventory-list">
           {" "}
-          {props.currentInventory.map((stock, index) => (
+          {this.props.currentInventory.map((stock, index) => (
             <li key={index}>
               {stock.name} {stock.ticker} {stock.amount}
             </li>
           ))}
         </ul>
       </div>
-    </div>
-  );
-};
+    );
+  }
+}
 
 export default Chest;
+
+// <div className="chest-currents-display">
+// <ChooseBounty
+//   currentBounty={this.props.currentBounty}
+//   onChange={this.props.onChange}
+//   onSubmit={this.props.onSubmit}
+// />
+
+// {/* <h2>Yer Bounty: </h2> */}
+// <Form
+//   onChange={this.props.onFormChange}
+//   options={this.props.options}
+//   showOptions={this.props.showOptions}
+//   userInput={this.props.userInput}
+//   filteredOptions={this.props.filteredOptions}
+//   activeOption={this.props.activeOption}
+//   onClick={this.props.onClick}
+//   onSubmit={this.props.onChestSubmit}
+//   ticker={this.props.ticker}
+// />
+// <div className="inventory-list">
+//   {this.state.createHowManyCanIBuy}
+//   <h2>You can buy: {this.state.createHowManyCanIBuy}</h2>
+// </div>

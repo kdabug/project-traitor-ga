@@ -34,7 +34,7 @@ class App extends Component {
         keyStats: {}
       },
 
-      currentBooty: 1000,
+      currentBounty: "",
       currentInventory: [
         { name: "Apple", ticker: "AAPL", amount: "2" },
         { name: "Apple", ticker: "AAPL", amount: "2" }
@@ -62,6 +62,7 @@ class App extends Component {
     this.handleQueryClick = this.handleQueryClick.bind(this);
     this.handleQueryKeyDown = this.handleQueryKeyDown.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleChestSubmit = this.handleChestSubmit.bind(this);
   }
 
   async fetchSpecificTickerInfo(ticker) {
@@ -87,9 +88,9 @@ class App extends Component {
     e.preventDefault();
     const { name, value } = e.target;
     console.log("target", name);
-    this.setState({
+    this.setState((prevState, newState) => ({
       [name]: value
-    });
+    }));
   }
   async handleListSubmit(e) {
     e.preventDefault();
@@ -184,6 +185,26 @@ class App extends Component {
     }));
   }
 
+  handleChestSubmit(e) {
+    e.preventDefault();
+    const { name, value } = e.target;
+    console.log("target", name);
+    this.setState((prevState, newState) => ({
+      [name]: value
+    }));
+    const { userInput, stockInfo } = this.state;
+    const tickerIndex = stockInfo.filter(
+      stock =>
+        stock.name.toLowerCase() === userInput.toLowerCase() ||
+        stock.symbol.toLowerCase() === userInput.toLowerCase()
+    );
+    const newTicker = tickerIndex[0].symbol;
+    this.setState((prevState, newState) => ({
+      ticker: newTicker
+    }));
+    this.props.history.push(`/chest/${newTicker}`);
+  }
+
   handleCompassSubmit(e) {
     e.preventDefault();
     const { name, value } = e.target;
@@ -232,12 +253,17 @@ class App extends Component {
             path="/chest"
             render={props => (
               <Chest
-                currentBooty={this.state.currentBooty}
+                {...props}
+                onChestSubmit={this.state.handleChestSubmit}
+                onChange={this.state.handleListChange}
+                onSubmit={this.state.handleSubmit}
+                currentBounty={this.state.currentBounty}
                 currentInventory={this.state.currentInventory}
                 stockInfo={this.state.stockInfo}
                 ticker={this.state.ticker}
+                tickerInfo={this.state.tickerInfo}
                 onKeyDown={this.handleQueryKeyDown}
-                onChange={this.handleQueryChange}
+                onFormChange={this.handleQueryChange}
                 onClick={this.handleQueryClick}
                 showOptions={this.state.showOptions}
                 userInput={this.state.userInput}
