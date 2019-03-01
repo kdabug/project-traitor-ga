@@ -16,9 +16,9 @@ class Plank extends Component {
     return (
       <div className="plank-container">
         <Nav />
-        <div className="plank-container-title">
+        <div className="page-titles">
           <h1>walk the plank</h1>
-          <p>in the depths, find yer treasure</p>
+          <h2>in the depths, find yer treasure</h2>
         </div>
         {/* <MarketTimer stockList={this.props.stockList} /> */}
         <div className="plank-list">

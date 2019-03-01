@@ -42,30 +42,32 @@ class StockDetail extends Component {
       <>
         <Nav />
         <div className="stock-detail">
-          <div
-            className="logo"
-            style={{ background: `url(${tickerInfo.companyLogo})` }}
-          />
-          <div className="stock-detail-info">
-            <p>Symbol: {tickerInfo.companyInfo.symbol}</p>
-            <p>Name: {tickerInfo.companyInfo.companyName || "no name found"}</p>
-            <p>
-              Industry: {tickerInfo.companyInfo.industry || "industry unknown"}
-            </p>
-            <p>
-              Description:{" "}
-              {tickerInfo.companyInfo.description || "no description found"}
-            </p>
-            <p>
-              Website:{" "}
-              {tickerInfo.companyInfo.website ? (
-                <a href={tickerInfo.companyInfo.website}>
-                  {tickerInfo.companyInfo.website}
-                </a>
-              ) : (
-                "no linked website"
-              )}{" "}
-            </p>
+          <div className="head-stock-detail-container">
+            <img className="logo" src={tickerInfo.companyLogo.url} />
+            <div className="stock-detail-info">
+              <h2>
+                {tickerInfo.companyInfo.symbol} -{" "}
+                {tickerInfo.companyInfo.companyName || "no name found"}
+              </h2>
+              <p>
+                Industry:{" "}
+                {tickerInfo.companyInfo.industry || "industry unknown"}
+              </p>
+              <p>
+                Description:{" "}
+                {tickerInfo.companyInfo.description || "no description found"}
+              </p>
+              <p>
+                Website:{" "}
+                {tickerInfo.companyInfo.website ? (
+                  <a href={tickerInfo.companyInfo.website}>
+                    {tickerInfo.companyInfo.website}
+                  </a>
+                ) : (
+                  "no linked website"
+                )}{" "}
+              </p>
+            </div>
           </div>
 
           <div className="stock-price-info">
@@ -82,31 +84,35 @@ class StockDetail extends Component {
             </p>
             <p>Year-to-date change: {tickerInfo.keyStats.ytdChangePercent}%</p>
           </div>
-
-          <button
-            className="pretty-button"
-            onClick={this.handleShowPeersButton}
-          >
-            {this.state.showPeers ? "Hide Peers" : "Show Peers"}
-          </button>
-          {this.state.showPeers && (
-            <div className="show-peers">
-              <ul className="peers">
-                {tickerInfo.companyPeers.map((peer, index) => (
-                  <li key={index}>{peer}</li>
-                ))}
-              </ul>
-            </div>
-          )}
-          <button
-            className="card-button"
-            onClick={() =>
-              this.props.history.push(`/compass/${this.props.stock.symbol}`)
-            }
-          >
-            <h2>Compass</h2>
-            <p>Map Stock OverTime</p>
-          </button>
+          <div className="stock-buttons">
+            <button
+              className="show-details-button"
+              onClick={this.handleShowPeersButton}
+            >
+              {this.state.showPeers ? "Hide Peers" : "Show Peers"}
+            </button>
+            {this.state.showPeers && (
+              <div className="show-peers">
+                <ul className="peers">
+                  {tickerInfo.companyPeers.map((peer, index) => (
+                    <li key={index}>{peer}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            <button
+              className="show-details-button"
+              onClick={() =>
+                this.props.history.push(
+                  `/compass/${this.props.match.params.ticker}`
+                )
+              }
+            >
+              Compass
+              <br />
+              Map Stock OverTime
+            </button>
+          </div>
         </div>
       </>
     );

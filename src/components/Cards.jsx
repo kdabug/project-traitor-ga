@@ -17,7 +17,7 @@ const Cards = props => {
         </h2>
         <h2>Current Price: ${props.stock.latestPrice}</h2>
       </div>
-      <div className="cards-buttons">
+      <div className="cards-buttons-container">
         <button
           className="card-button"
           onClick={() => props.history.push(`/details/${props.stock.symbol}`)}

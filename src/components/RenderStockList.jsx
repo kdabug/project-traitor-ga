@@ -6,7 +6,11 @@ const RenderStockList = props => {
     <div className="form-stock-list">
       <p>Search Stocks by Currated Lists:</p>
       <form onSubmit={props.onListSubmit}>
-        <select name="listSelect" onChange={props.onListChange}>
+        <select
+          className="list-selector"
+          name="listSelect"
+          onChange={props.onListChange}
+        >
           <option value="mostactive">Most Active</option>
           <option value="gainers">Winners</option>
           <option value="losers">Losers</option>

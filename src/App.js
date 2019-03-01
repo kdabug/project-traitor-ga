@@ -61,6 +61,7 @@ class App extends Component {
     this.handleQueryChange = this.handleQueryChange.bind(this);
     this.handleQueryClick = this.handleQueryClick.bind(this);
     this.handleQueryKeyDown = this.handleQueryKeyDown.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   async fetchSpecificTickerInfo(ticker) {
@@ -172,6 +173,15 @@ class App extends Component {
       userInput: ""
     }));
     this.props.history.push(`/details/${newTicker}`);
+  }
+
+  handleSubmit(e) {
+    e.preventDefault();
+    const { name, value } = e.target;
+    console.log("target", name);
+    this.setState((prevState, newState) => ({
+      [name]: value
+    }));
   }
 
   handleCompassSubmit(e) {
@@ -289,6 +299,7 @@ class App extends Component {
                   ticker={this.state.ticker}
                   fetchSpecificTickerInfo={this.fetchSpecificTickerInfo}
                   tickerInfo={this.state.tickerInfo}
+                  handleSubmit={this.handleSubmit}
                 />
               );
             }}

@@ -54,7 +54,6 @@ class Form extends Component {
       <div className="form-query">
         <div className="form-container">
           <form id="query-search-form">
-            <label htmlFor="userInput">Search by Company Name or Symbol</label>
             <input
               type="text"
               className="search-box"
@@ -64,6 +63,7 @@ class Form extends Component {
               onSubmit={onSubmit}
               name="userInput"
               autoComplete="off"
+              placeholder="search company name or ticker symbol"
             />
           </form>
           <button

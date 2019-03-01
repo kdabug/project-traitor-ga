@@ -5,18 +5,22 @@ const Chest = props => {
   return (
     <div className="chest-container">
       <Nav />
-      <h1>chose the route of the traitor, have ye?</h1>
-      <h2>here's your treasure chest</h2>
-      <h2> Current bounty: {props.currentBooty}</h2>
-      <ul>
-        {" "}
-        Current Inventory:
-        {props.currentInventory.map((stock, index) => (
-          <li key={index}>
-            {stock.name} {stock.ticker} {stock.amount}
-          </li>
-        ))}
-      </ul>
+      <div className="page-titles">
+        <h1>chose the route of the traitor, have ye?</h1>
+        <h2>yer treasure chest</h2>
+      </div>
+      <div className="chest-currents-display">
+        <h2>Yer Bounty: {props.currentBooty}</h2>
+        <h2>Treasurey:</h2>
+        <ul className="inventory-list">
+          {" "}
+          {props.currentInventory.map((stock, index) => (
+            <li key={index}>
+              {stock.name} {stock.ticker} {stock.amount}
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };
