@@ -39,6 +39,7 @@ class App extends Component {
         { name: "Apple", ticker: "AAPL", amount: "2" },
         { name: "Apple", ticker: "AAPL", amount: "2" }
       ],
+      userNumberInput: "",
       transactionHistory: [],
 
       stockInfo: [],
@@ -185,6 +186,24 @@ class App extends Component {
     }));
   }
 
+  handleBountySubmit(e) {
+    e.preventDefault();
+    const { name, value } = e.target;
+    console.log("target", name);
+    this.setState((prevState, newState) => ({
+      [name]: value
+    }));
+  }
+
+  handleBountyChange(e) {
+    e.preventDefault();
+    const { name, value } = e.target;
+    console.log("target", name);
+    this.setState((prevState, newState) => ({
+      [name]: value
+    }));
+  }
+
   handleChestSubmit(e) {
     e.preventDefault();
     const { name, value } = e.target;
@@ -199,6 +218,7 @@ class App extends Component {
         stock.symbol.toLowerCase() === userInput.toLowerCase()
     );
     const newTicker = tickerIndex[0].symbol;
+    this.fetchSpecificTickerInfo(newTicker);
     this.setState((prevState, newState) => ({
       ticker: newTicker
     }));
@@ -254,9 +274,10 @@ class App extends Component {
             render={props => (
               <Chest
                 {...props}
+                userNumberInput={this.state.userNumberInput}
                 onChestSubmit={this.state.handleChestSubmit}
-                onChange={this.state.handleListChange}
-                onSubmit={this.state.handleSubmit}
+                onChange={this.state.handleBountyChange}
+                onSubmit={this.state.handleBountySubmit}
                 currentBounty={this.state.currentBounty}
                 currentInventory={this.state.currentInventory}
                 stockInfo={this.state.stockInfo}

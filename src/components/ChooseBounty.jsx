@@ -9,7 +9,7 @@ const ChooseBounty = props => {
           type="text"
           className="set-bounty-box"
           onChange={props.onChange}
-          value={props.currentBounty}
+          value={props.userNumberInput}
           onSubmit={props.onSubmit}
           name="currentBounty"
           autoComplete="off"
