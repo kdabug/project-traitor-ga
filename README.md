@@ -5,7 +5,7 @@ traitor
 note: post-mvp items are indicated with an (\*) and might not be available at launch
 
 **link**
-[tbd]
+http://fanatical-pirate.surge.sh
 
 **images**
 see proposal images for wireframe and component heirarchy
