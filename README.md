@@ -5,7 +5,7 @@ traitor
 note: post-mvp items are indicated with an (\*) and might not be available at launch
 
 **link**
-http://fanatical-pirate.surge.sh
+https://gallant-haibt-6c9b60.netlify.com/
 
 **images**
 see proposal images for wireframe and component heirarchy
